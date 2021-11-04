@@ -1,0 +1,42 @@
+name: code-kitchen-coder-cloud-dev
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+    paths:
+      - build/code-kitchen/**
+      - build/coder/cloud-dev/**
+      - build/base-versions.json
+  pull_request:
+    branches:
+      - master
+    paths:
+      - build/code-kitchen/**
+      - build/coder/cloud-dev/**
+      - build/base-versions.json
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: production
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: chmod scripts
+        run: chmod +x ./build/coder/cloud-dev/build.sh ./build/coder/cloud-dev/push.sh
+        
+      - name: Log into registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build image
+        run: ./build/coder/cloud-dev/build.sh $GITHUB_RUN_NUMBER
+
+      - name: Push image
+        run: ./build/coder/cloud-dev/push.sh $GITHUB_RUN_NUMBER

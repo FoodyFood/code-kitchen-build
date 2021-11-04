@@ -1,0 +1,54 @@
+# The base version used for this image
+ARG base_coder_version
+
+
+# Build on our copy of the base image
+FROM ghcr.io/foodyfood/code-kitchen-coder:${base_coder_version}
+
+
+# Keep this seperate to make less full builds of the image
+WORKDIR /
+
+# Code Kitchen stuff
+COPY ./code-kitchen/branding/ /usr/lib/code-server/src/browser/media/
+COPY ./code-kitchen/GetStarted.md /code-kitchen/GetStarted.md
+
+# The modified entrypoint that copys code-kitchen stuff during startup
+COPY ./coder/cloud-dev/entrypoint.sh /code-kitchen/
+RUN sudo chmod +777 /code-kitchen/entrypoint.sh
+
+
+# These add the PGP keys for helm and kubectl 
+RUN sudo apt update; \
+    sudo apt upgrade; \
+    sudo apt install gnupg2 -y; \
+    sudo curl https://baltocdn.com/helm/signing.asc | sudo apt-key add - ; \
+    sudo echo "deb https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list ; \
+    sudo curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add - ; \
+    sudo echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list ; \
+    sudo apt update;
+
+
+# The useful dev packages 
+RUN sudo apt install -y python3-pip python3-venv make helm kubectl npm unzip twine wget chromium; \
+    sudo npm install -g aws-cdk yarn n; \
+    sudo n stable;
+RUN sudo curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"; \
+    sudo unzip -q awscliv2.zip; \
+    sudo /aws/install -i /bin/; \
+    sudo rm awscliv2.zip;
+RUN sudo wget https://github.com/mikefarah/yq/releases/download/v4.13.3/yq_linux_amd64.tar.gz -O - |  sudo tar xz && sudo mv yq_linux_amd64 /bin/yq; \
+    curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp ; \
+    sudo mv /tmp/eksctl /bin; \
+    sudo rm -rf /tmp/eksctl; \
+    sudo curl -LO https://github.com/kvaps/kubectl-node-shell/raw/master/kubectl-node_shell ; \
+    sudo chmod +x ./kubectl-node_shell ; \
+    sudo mv ./kubectl-node_shell /usr/local/bin/kubectl-node_shell;
+
+
+# Some startup stuff
+EXPOSE 8080
+USER 1000
+ENV USER=coder
+WORKDIR /home/coder
+ENTRYPOINT ["/code-kitchen/entrypoint.sh", "--bind-addr", "0.0.0.0:8080", "."]

@@ -1,0 +1,27 @@
+ARG base_hub_version
+
+# Build on our copy of the base image
+FROM ghcr.io/foodyfood/code-kitchen-hub:${base_hub_version}
+
+# Add Code Kitchen Logos 
+COPY ./code-kitchen/branding /code-kitchen/branding
+COPY code-kitchen/branding/favicon.ico /usr/local/share/jupyterhub/static/favicon.ico
+
+# Add code-kitchen theme to web pages
+COPY code-kitchen/hub/404.html /usr/local/share/jupyterhub/templates/404.html
+COPY code-kitchen/hub/admin.html /usr/local/share/jupyterhub/templates/admin.html
+COPY code-kitchen/hub/error.html /usr/local/share/jupyterhub/templates/error.html
+COPY code-kitchen/hub/home.html /usr/local/share/jupyterhub/templates/home.html
+COPY code-kitchen/hub/login.html /usr/local/share/jupyterhub/templates/login.html
+COPY code-kitchen/hub/logout.html /usr/local/share/jupyterhub/templates/logout.html
+COPY code-kitchen/hub/not_running.html /usr/local/share/jupyterhub/templates/not_running.html
+COPY code-kitchen/hub/oauth.html /usr/local/share/jupyterhub/templates/oauth.html
+COPY code-kitchen/hub/page.html /usr/local/share/jupyterhub/templates/page.html
+COPY code-kitchen/hub/spawn_pending.html /usr/local/share/jupyterhub/templates/spawn_pending.html
+COPY code-kitchen/hub/spawn.html /usr/local/share/jupyterhub/templates/spawn.html
+COPY code-kitchen/hub/stop_pending.html /usr/local/share/jupyterhub/templates/stop_pending.html
+COPY code-kitchen/hub/token.html /usr/local/share/jupyterhub/templates/token.html
+
+WORKDIR /srv/jupyterhub/
+EXPOSE 8000
+CMD ["jupyterhub"]

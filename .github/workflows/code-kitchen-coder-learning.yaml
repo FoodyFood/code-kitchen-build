@@ -1,0 +1,42 @@
+name: code-kitchen-coder-learning
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+    paths:
+      - build/code-kitchen/**
+      - build/coder/learning/**
+      - build/base-versions.json
+  pull_request:
+    branches:
+      - master
+    paths:
+      - build/code-kitchen/**
+      - build/coder/learning/**
+      - build/base-versions.json
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: production
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: chmod scripts
+        run: chmod +x ./build/coder/learning/build.sh ./build/coder/learning/push.sh
+        
+      - name: Log into registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build image
+        run: ./build/coder/learning/build.sh $GITHUB_RUN_NUMBER
+
+      - name: Push image
+        run: ./build/coder/learning/push.sh $GITHUB_RUN_NUMBER

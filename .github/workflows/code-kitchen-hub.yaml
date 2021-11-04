@@ -1,0 +1,42 @@
+name: code-kitchen-hub
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+    paths:
+      - build/code-kitchen/**
+      - build/hub/**
+      - build/base-versions.json
+  pull_request:
+    branches:
+      - master
+    paths:
+      - build/code-kitchen/**
+      - build/hub/**
+      - build/base-versions.json
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: production
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: chmod scripts
+        run: chmod +x ./build/hub/build.sh ./build/hub/push.sh
+        
+      - name: Log into registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build image
+        run: ./build/hub/build.sh $GITHUB_RUN_NUMBER
+
+      - name: Push image
+        run: ./build/hub/push.sh $GITHUB_RUN_NUMBER
