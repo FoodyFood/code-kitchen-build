@@ -1,4 +1,4 @@
-# Code Kitchen - Custom Codespaces for Cloud and Web Development
+# Code Kitchen - My Custom Codespaces
 
 ```bash
 Maintained by: Daniel OConnor
@@ -7,6 +7,10 @@ Maintained by: Daniel OConnor
 ### Description
 
 Code Kitchen is an IDE you can host in your own kubernetes cluster. 
+
+This is based off cdr/coder, and JupyterHub, which when combined give you managed VS Code containers.
+
+The conntainers this repo builds are custom ones I use for myself and my friends.
 
 This repository houses the builds, the related artifacts, and the associated GitHub workflows.
 
