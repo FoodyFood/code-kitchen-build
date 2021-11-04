@@ -20,6 +20,17 @@ This repository houses the builds, the related artifacts, and the associated Git
 [![code-kitchen-coder-cloud-dev](https://github.com/FoodyFood/code-kitchen-build/actions/workflows/code-kitchen-coder.yaml/badge.svg)](https://github.com/FoodyFood/code-kitchen-build/actions/workflows/code-kitchen-coder.yaml) \
 [![code-kitchen-coder-learning](https://github.com/FoodyFood/code-kitchen-build/actions/workflows/code-kitchen-coder-learning.yaml/badge.svg)](https://github.com/FoodyFood/code-kitchen-build/actions/workflows/code-kitchen-coder-learning.yaml) 
 
+
+### Repositories In The Series
+
+This series of repositories brings you from creating a cluster through to hsoting code-kitchen yourself as well as anything else you can dream of building in code-kitchen.
+
+Make your own cluster: [personal-cluster](https://github.com/FoodyFood/personal-cluster)
+Configure the cluster: [personal-cluster-base-config](https://github.com/FoodyFood/personal-cluster-base-config)
+Build code-kitchen: [code-kitchen-build](https://github.com/FoodyFood/code-kitchen-build)
+Deploy code-kitchen to your cluster: [code-kitchen-deploy](https://github.com/FoodyFood/code-kitchen-deploy)
+
+
 ### What Does It Make
 
 Whe you run `make all` it will build 3 images, 1 hub, and 2 environments. 
