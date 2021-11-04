@@ -1,4 +1,4 @@
-# Code Kitchen - My Custom Codespaces
+# Code Kitchen - Custom Codespaces
 
 ```bash
 Maintained by: Daniel OConnor
