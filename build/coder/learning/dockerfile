@@ -24,7 +24,7 @@ RUN sudo apt update -y; \
 
 
 # The web dev learning packages 
-RUN sudo apt install -y make wget chromium jekyll ruby-bundler ruby-full build-essential zlib1g-dev
+RUN sudo apt install -y python3-pip python3-venv make wget chromium jekyll ruby-bundler ruby-full build-essential zlib1g-dev
 
 
 # Some startup stuff
