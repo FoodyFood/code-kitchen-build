@@ -26,7 +26,7 @@ fi
 
 
 # Put the get started guide in a more convenient location
-cp /code-kitchen/GetStarted.md ~/GetStarted.md
+sudo cp /code-kitchen/GetStarted.md ~/GetStarted.md
 
 
 # In case there are permission issues for the users ssh key
